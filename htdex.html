@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAL RAKSHAK | Water Safety</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f6fc;color:#173657}
+header{height:95px;background:linear-gradient(100deg,#fff,#dceefa);
+display:flex;align-items:center;padding:16px 28px;justify-content:space-between;
+border-bottom:1px solid #d8e5f1}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{font-size:42px;color:#1678bd}
+h1{font-size:28px;margin:0;color:#145487}
+.subtitle{margin-top:6px;font-size:14px}
+.online{color:#13885d;font-size:14px}
+.layout{display:flex;min-height:calc(100vh - 95px)}
+aside{width:220px;background:#123253;color:white;padding:22px 12px}
+nav a{display:block;padding:15px 13px;margin-bottom:8px;border-radius:7px;
+color:#e4f0ff;text-decoration:none}
+nav a:hover,nav a.active{background:#1768ad}
+.sidebar-note{margin:100px 15px 0;color:#9ecaf1;line-height:1.6}
+main{flex:1;min-width:0;padding:22px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{background:white;border:1px solid #dce7f2;border-radius:11px;
+padding:19px;box-shadow:0 2px 7px #193b5808;min-width:0}
+.card h3{font-size:15px;margin:0 0 14px}
+.big{font-size:29px;font-weight:bold;color:#174b75}
+.muted{font-size:13px;color:#6b7e91;margin-top:9px}
+.status{display:inline-block;padding:8px 13px;border-radius:20px;
+background:#fff0c9;color:#9b5b00;font-weight:bold}
+.good{background:#d8f6e5;color:#137548}
+.section-grid{display:grid;grid-template-columns:1.65fr 1fr;gap:14px;margin-top:18px}
+.section-title{font-size:19px;margin:0 0 17px}
+.chart-wrap{height:250px;width:100%}
+canvas{width:100%;height:100%}
+.readings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.reading{padding:16px 10px;border-radius:9px;background:#eaf4ff}
+.reading:nth-child(2){background:#fff4d8}
+.reading:nth-child(3){background:#e1f7ed}
+.reading:nth-child(4){background:#eee8ff}
+.reading p{font-size:13px;margin:0 0 16px}
+.reading strong{font-size:20px}
+.alert{padding:13px 0;border-bottom:1px solid #e4edf5;font-size:14px}
+.alert:last-child{border-bottom:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;
+margin-right:8px;background:#f0b429}
+.red{background:#ed5151}.green{background:#21ad91}
+.notice{background:#fff5db;border:1px solid #f6e7b7;border-radius:9px;
+padding:17px;margin-top:15px;line-height:1.6;font-size:14px}
+button{background:#176db4;color:white;border:0;border-radius:6px;
+padding:9px 12px;cursor:pointer}
+button:hover{background:#0c528c}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{text-align:left;padding:10px 5px;border-bottom:1px solid #e3ebf4}
+th{background:#eef5fc}
+.small-title{display:flex;justify-content:space-between;align-items:center}
+#message{font-size:12px;color:#657b91;margin-top:10px}
+@media(max-width:1050px){
+ .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .section-grid{grid-template-columns:1fr}
+ .readings{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:650px){
+ header{padding:12px;height:auto}
+ h1{font-size:20px}.subtitle{font-size:11px}
+ .layout{display:block}
+ aside{width:100%;padding:8px}
+ nav{display:flex;overflow-x:auto}
+ nav a{white-space:nowrap;padding:12px 10px}
+ .sidebar-note{display:none}
+ main{padding:12px}
+ .cards{grid-template-columns:1fr 1fr;gap:8px}
+ .card{padding:13px}
+ .big{font-size:23px}
+ .readings{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">💧</div>
+    <div>
+      <h1>JAL RAKSHAK</h1>
+      <div class="subtitle">Sense the Water. Predict the Risk. Protect the Lives.</div>
+    </div>
+  </div>
+  <div class="online">● Demo Mode</div>
+</header>
+
+<div class="layout">
+  <aside>
+    <nav>
+      <a class="active" href="#dashboard">▦ Dashboard</a>
+      <a href="#live">〽 Live Data</a>
+      <a href="#trends">↗ Trends</a>
+      <a href="#alerts">♟ Alerts</a>
+      <a href="#location">⌖ Map View</a>
+      <a href="#settings">⚙ Settings</a>
+    </nav>
+    <div class="sidebar-note">〰️<br>Water Safety<br>Our Priority</div>
+  </aside>
+
+  <main id="dashboard">
+    <section class="cards">
+      <div class="card">
+        <h3>💧 Current Water Level</h3>
+        <div class="big" id="level">2.36 m</div>
+        <div class="muted">Sample measurement</div>
+      </div>
+      <div class="card">
+        <h3>🛡 Risk Status</h3>
+        <span class="status" id="risk">WARNING</span>
+        <div class="muted" id="riskText">Demo risk assessment</div>
+      </div>
+      <div class="card">
+        <h3>◉ Sensor Health</h3>
+        <span class="status good">Demo / Unverified</span>
+        <div class="muted">Real hardware not connected</div>
+      </div>
+      <div class="card">
+        <h3>📍 Monitoring Location</h3>
+        <strong>Station 01</strong>
+        <div class="muted">Set your station location</div>
+      </div>
+    </section>
+
+    <section class="section-grid">
+      <div>
+        <div class="card" id="trends">
+          <div class="small-title">
+            <h2 class="section-title">📈 Water Level Trend</h2>
+            <button onclick="drawChart()">Refresh</button>
+          </div>
+          <div class="chart-wrap"><canvas id="chart"></canvas></div>
+          <div id="message">Illustrative sample data — not live sensor readings.</div>
+        </div>
+
+        <div class="card" id="live" style="margin-top:14px">
+          <h2 class="section-title">〽 Live Readings</h2>
+          <div class="readings">
+            <div class="reading"><p>Water Level</p><strong id="rLevel">2.36 m</strong></div>
+            <div class="reading"><p>Rate of Rise</p><strong>Demo</strong></div>
+            <div class="reading"><p>Temperature</p><strong>— °C</strong></div>
+            <div class="reading"><p>Signal Strength</p><strong>— dBm</strong></div>
+          </div>
+          <div class="notice">
+            <strong>💡 What is happening?</strong>
+            <p id="explanation">This is a demonstration dashboard. Connect and calibrate the sensor before using readings for real safety decisions.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" id="location">
+          <h2 class="section-title">📍 Monitoring Location</h2>
+          <div style="background:#e4f1fb;padding:35px 12px;text-align:center;border-radius:8px">
+            <div style="font-size:38px">🗺️</div>
+            <strong>Water Level Station 01</strong>
+            <p class="muted">Map integration can be added here.</p>
+          </div>
+        </div>
+
+        <div class="card" id="alerts" style="margin-top:14px">
+          <h2 class="section-title">🔔 Recent Alerts</h2>
+          <div id="alertList">
+            <div class="alert"><span class="dot"></span>WARNING — Demo event</div>
+            <div class="alert"><span class="dot red"></span>CRITICAL — Demo event</div>
+            <div class="alert"><span class="dot green"></span>NORMAL — Demo event</div>
+          </div>
+          <button onclick="testAlert()">Test Demo Alert</button>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h2 class="section-title">🕒 Event History</h2>
+          <table>
+            <thead><tr><th>Time</th><th>Level</th><th>Status</th></tr></thead>
+            <tbody id="history">
+              <tr><td>Demo</td><td>2.36 m</td><td>Warning</td></tr>
+              <tr><td>Demo</td><td>2.10 m</td><td>Normal</td></tr>
+              <tr><td>Demo</td><td>1.45 m</td><td>Normal</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" id="settings" style="margin-top:14px">
+          <h2 class="section-title">⚙ Demo Settings</h2>
+          <label for="testLevel">Test water level (m)</label>
+          <input id="testLevel" type="number" min="0" max="10" step="0.1"
+            value="2.36" style="width:100%;padding:10px;margin:10px 0">
+          <button onclick="updateDemo()">Update Demo Reading</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const canvas = document.getElementById("chart");
+const ctx = canvas.getContext("2d");
+let levels = [0.8,0.9,0.88,1.02,1.1,1.05,1.2,1.25,1.38,1.32,
+              1.48,1.55,1.7,1.65,1.82,1.9,2.05,2.0,2.2,2.36];
+
+function drawChart(){
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width*dpr;
+  canvas.height = rect.height*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  const w=rect.width, h=rect.height;
+  const left=38, right=12, top=12, bottom=30;
+  const cw=w-left-right, ch=h-top-bottom;
+  ctx.clearRect(0,0,w,h);
+  ctx.font="12px Arial";
+  ctx.fillStyle="#61768b";
+  ctx.strokeStyle="#e2eaf2";
+  ctx.lineWidth=1;
+
+  for(let i=0;i<=4;i++){
+    const y=top+ch*i/4;
+    ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
+    ctx.fillText((4-i).toFixed(1),3,y+4);
+  }
+  const points=levels.map((v,i)=>({
+    x:left+i*cw/(levels.length-1),
+    y:top+ch-(v/4)*ch
+  }));
+  ctx.beginPath();
+  points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.lineTo(points[points.length-1].x,top+ch);
+  ctx.lineTo(points[0].x,top+ch);
+  ctx.closePath();
+  ctx.fillStyle="#d9edff";ctx.fill();
+
+  ctx.beginPath();
+  points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.strokeStyle="#1684dc";ctx.lineWidth=2.5;ctx.stroke();
+
+  ["6 AM","9 AM","12 PM","3 PM","6 PM"].forEach((t,i)=>{
+    ctx.fillStyle="#526b82";
+    ctx.fillText(t,left+i*cw/4-12,h-7);
+  });
+}
+
+function updateDemo(){
+  const v=Number(document.getElementById("testLevel").value);
+  if(!Number.isFinite(v)||v<0||v>10){
+    alert("Enter a value between 0 and 10.");return;
+  }
+  document.getElementById("level").textContent=v.toFixed(2)+" m";
+  document.getElementById("rLevel").textContent=v.toFixed(2)+" m";
+  levels.push(v);if(levels.length>20)levels.shift();
+  drawChart();
+
+  const risk=v>=3?"CRITICAL":v>=2?"WARNING":"NORMAL";
+  const el=document.getElementById("risk");
+  el.textContent=risk;
+  el.className="status "+(risk==="NORMAL"?"good":"");
+  document.getElementById("riskText").textContent="Demo classification only";
+  document.getElementById("explanation").textContent=
+    "Demo level: "+v.toFixed(2)+" m. Status: "+risk+
+    ". Thresholds are placeholders; calibrate them for your monitoring site.";
+  addHistory(v,risk);
+}
+
+function addHistory(v,risk){
+  const row=document.createElement("tr");
+  [new Date().toLocaleTimeString(),v.toFixed(2)+" m",risk].forEach(value=>{
+    const td=document.createElement("td");
+    td.textContent=value;row.appendChild(td);
+  });
+  document.getElementById("history").prepend(row);
+}
+
+function testAlert(){
+  const box=document.getElementById("alertList");
+  const item=document.createElement("div");
+  item.className="alert";
+  item.textContent="DEMO — Test alert created at "+new Date().toLocaleTimeString();
+  box.prepend(item);
+}
+
+window.addEventListener("resize",drawChart);
+drawChart();
+</script>
+</body>
+</html>
